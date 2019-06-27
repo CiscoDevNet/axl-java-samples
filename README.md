@@ -59,7 +59,7 @@ Visit the [AXL Developer Site](https://developer.cisco.com/site/axl/)
 1. Import the AXL WSDL and generate the AXL/JAX-WS `.java` files:
 
     ```bash
-    wsimport -keep -b schema/AXLSoap.xsd -Xnocompile  -s src -d bin -verbose schema/AXLAPI.wsdl
+    wsimport -keep -b schema/AXLSoap.xsd -Xnocompile  -s src -d bin -p com.cisco.axl.api -verbose schema/AXLAPI.wsdl
     ```
 
 1. Finally, to launch one of the available samples, in VS Code select the **Debug** panel, choose a launch configuration from the dropdown-list in the upper-left, and click the green 'Start Debugging' arrow:
