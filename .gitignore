@@ -1,0 +1,5 @@
+.DS_Store
+certificate/**
+bin/**
+src/com/cisco/axl/api/**
+.vscode/settings.json
