@@ -42,7 +42,7 @@ Visit the [AXL Developer Site](https://developer.cisco.com/site/axl/)
     sudo $JAVA_HOME/bin/keytool -import -alias {ANYNAME} -file certificate/{CERTFILE} -keystore  $JAVA_HOME/jre/lib/security/cacerts
     ```
 
-1. The AXL 11.5 versions of the WSDL files are included in this proect.  If want to use a different AXL version, download the AXL WSDL files for your CUCM version (
+1. The AXL 11.5 versions of the WSDL files are included in this proect.  If want to use a different AXL version, download the AXL WSDL files for your CUCM version:
 
     1. From the CUCM Administration UI, download the 'Cisco AXL Tookit' from **Applications** / **Plugins**
 
