@@ -1,26 +1,7 @@
-package com.cisco.axl.samples;
+package com.cisco.axlsamples;
 
 // Performs <addMobilityProfile>, and then <removeMobilityProfile> AXL API operations
 // with some hard-coded values.
-//
-// The Java package used to build specific AXL objects and execute API
-// requests needs to be auto-generated using the AXL WSDL and the JAX-WS 
-// wsimport command (run from the project root directory):
-//
-//   wsimport -keep -b schema/AXLSoap.xsd -Xnocompile  -s src -d bin -p com.cisco.axl.api -verbose schema/AXLAPI.wsdl
-//
-// As AXL uses HTTPS, you will need to download and install AXL's HTTPS certificate
-// into the local Java keystore.  The following command works on Linux,
-// see the Oracle Java documentation for more info on managing Java certificates.
-// (Be sure to replace {ANYNAME} and {CERTFILE} with your particular values)
-//
-//   sudo $JAVA_HOME/bin/keytool -import -alias {ANYNAME} -file certificate/{CERTFILE} -keystore  $JAVA_HOME/jre/lib/security/cacerts
-//
-// Tested using:
-//
-// Ubuntu Linux 19.04
-// Java 1.8u201
-// CUCM 11.5
 
 // Copyright (c) 2019 Cisco and/or its affiliates.
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -43,15 +24,16 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.ws.BindingProvider;
 
 // import only the XL package modules needed for this sample
-import com.cisco.axl.api.AXLAPIService;
-import com.cisco.axl.api.AXLPort;
-import com.cisco.axl.api.AddMobilityProfileReq;
-import com.cisco.axl.api.NameAndGUIDRequest;
-import com.cisco.axl.api.ObjectFactory;
-import com.cisco.axl.api.StandardResponse;
-import com.cisco.axl.api.XDirn;
-import com.cisco.axl.api.XFkType;
-import com.cisco.axl.api.XMobilityProfile;
+import com.cisco.axlsamples.api.AXLAPIService;
+import com.cisco.axlsamples.api.AXLPort;
+import com.cisco.axlsamples.api.AddMobilityProfileReq;
+import com.cisco.axlsamples.api.NameAndGUIDRequest;
+import com.cisco.axlsamples.api.ObjectFactory;
+import com.cisco.axlsamples.api.StandardResponse;
+import com.cisco.axlsamples.api.XDirn;
+import com.cisco.axlsamples.api.XFkType;
+import com.cisco.axlsamples.api.XMobilityProfile;
+import io.github.cdimascio.dotenv.Dotenv;
 
 // To import the entire AXL package contents:
 //
@@ -60,6 +42,19 @@ import com.cisco.axl.api.XMobilityProfile;
 public class addMobilityProfile {
 
     public static void main(String[] args) {
+
+        Boolean debug = false;
+
+        if ( debug ) {
+            System.setProperty("com.sun.xml.ws.transport.http.client.HttpTransportPipe.dump", "true");
+            System.setProperty("com.sun.xml.internal.ws.transport.http.client.HttpTransportPipe.dump", "true");
+            System.setProperty("com.sun.xml.ws.transport.http.HttpAdapter.dump", "true");
+            System.setProperty("com.sun.xml.internal.ws.transport.http.HttpAdapter.dump", "true");
+            System.setProperty("com.sun.xml.internal.ws.transport.http.HttpAdapter.dumpTreshold", "999999");
+        }
+
+        // Retrieve environment variables from .env, if present
+        Dotenv dotenv = Dotenv.load();
 
         // Verify the JVM has a console for user input
         if (System.console() == null) {
@@ -78,11 +73,11 @@ public class addMobilityProfile {
         // for our particular environment in the JAX-WS client.
         // Edit creds.java to configure these values
         ((BindingProvider) axlPort).getRequestContext().put(
-                BindingProvider.ENDPOINT_ADDRESS_PROPERTY, "https://" + creds.CUCM + ":8443/axl/");
+                BindingProvider.ENDPOINT_ADDRESS_PROPERTY, "https://" + dotenv.get("CUCM") + ":8443/axl/");
         ((BindingProvider) axlPort).getRequestContext().put(
-                BindingProvider.USERNAME_PROPERTY, creds.USER);
+                BindingProvider.USERNAME_PROPERTY, dotenv.get("AXL_USER" ));
         ((BindingProvider) axlPort).getRequestContext().put(
-                BindingProvider.PASSWORD_PROPERTY, creds.PASSWORD);
+                BindingProvider.PASSWORD_PROPERTY, dotenv.get("AXL_PASSWORD"));
 
         // Create an object representing a <getPhone> request
         ObjectFactory objectFactory = new ObjectFactory();
@@ -107,7 +102,7 @@ public class addMobilityProfile {
             
                     XFkType foreignKey = new XFkType();
 
-                    foreignKey.setValue("testPartition");
+                    foreignKey.setValue(null);
 
                     JAXBElement<XFkType> partition = objectFactory.createXDirnRoutePartitionName(foreignKey);
 
