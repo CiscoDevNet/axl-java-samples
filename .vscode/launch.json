@@ -8,17 +8,22 @@
             "type": "java",
             "name": "Debug: addMobilityProfile",
             "request": "launch",
-            "mainClass": "com.cisco.axl.samples.addMobilityProfile",
-            "projectName": "axl-java-samples",
-            "console": "integratedTerminal"
+            "mainClass": "com.cisco.axlsamples.addMobilityProfile",
+            "projectName": "axl-java-samples"
         },
         {
             "type": "java",
             "name": "Debug: getPhone",
             "request": "launch",
-            "mainClass": "com.cisco.axl.samples.getPhone",
-            "projectName": "axl-java-samples",
-            "console": "integratedTerminal"
+            "mainClass": "com.cisco.axlsamples.getPhone",
+            "projectName": "axl-java-samples"
+        },
+        {
+            "type": "java",
+            "name": "Debug: executeSqlQuery",
+            "request": "launch",
+            "mainClass": "com.cisco.axlsamples.executeSqlQuery",
+            "projectName": "axl-java-samples"
         }
     ]
 }
