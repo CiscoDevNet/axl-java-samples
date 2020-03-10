@@ -77,7 +77,7 @@ Visit the [AXL Developer Site](https://developer.cisco.com/site/axl/)
         AXLSoap.xsd
         ```
 
-1. Import the AXL WSDL and generate the AXL/JAX-WS `.java` files.  
+1. Generate the AXL/JAX-WS `.java` files from the AXL WSDL.
 
     From the project root, run:
 
