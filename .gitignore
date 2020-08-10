@@ -24,7 +24,6 @@ buildNumber.properties
 .settings/
 .classpath
 .project
-.factorypath
 
 # DevNet additions
 

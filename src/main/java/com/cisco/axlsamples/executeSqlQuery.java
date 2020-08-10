@@ -1,5 +1,7 @@
 package com.cisco.axlsamples;
 
+import java.util.Iterator;
+
 // Performs a <executeSqlQuery> operation for the applicationusers table and extracts
 // the name and pkid from the response using the AXL API.
 
@@ -21,24 +23,15 @@ package com.cisco.axlsamples;
 // SOFTWARE.
 
 import java.util.List;
-import java.util.Map;
-import java.util.Iterator;
 
 import javax.xml.ws.BindingProvider;
 
-import java.security.cert.X509Certificate;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.X509TrustManager;
-
 // Import only the AXL package modules needed for this sample
 import com.cisco.axlsamples.api.AXLAPIService;
-import com.cisco.axlsamples.api.AXLError_Exception;
 import com.cisco.axlsamples.api.AXLPort;
 import com.cisco.axlsamples.api.ExecuteSQLQueryReq;
 import com.cisco.axlsamples.api.ExecuteSQLQueryRes;
+import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;
 
 // To import the entire AXL package contents:
 //
@@ -48,11 +41,13 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class executeSqlQuery {
 
-    public static void main(String[] args) throws NoSuchAlgorithmException, KeyManagementException, AXLError_Exception {
+    public static void main( String[] args) {
 
         Boolean debug = false;
 
-        if ( debug ) { System.setProperty("com.sun.xml.ws.transport.http.client.HttpTransportPipe.dump", "true"); }
+        if ( debug ) {
+            System.setProperty("com.sun.xml.internal.ws.transport.http.client.HttpTransportPipe.dump", "true");
+        }
 
         // Retrieve environment variables from .env, if present
         Dotenv dotenv = Dotenv.load();
@@ -65,35 +60,16 @@ public class executeSqlQuery {
 
         // Instantiate the generated AXL API Service client
         AXLAPIService axlService = new AXLAPIService();
-
-        // Get access to the request context so we can set custom params
         AXLPort axlPort = axlService.getAXLPort();
-        Map< String, Object > requestContext = ( ( BindingProvider ) axlPort ).getRequestContext();
 
         // Set the AXL API endpoint address, user, and password
-        //   for our particular environment in the JAX-WS client.
-        //   Configure these values in .env
-        requestContext.put( BindingProvider.ENDPOINT_ADDRESS_PROPERTY, "https://" + dotenv.get( "CUCM" ) + ":8443/axl/");
-        requestContext.put( BindingProvider.USERNAME_PROPERTY, dotenv.get( "AXL_USER" ) );
-        requestContext.put( BindingProvider.PASSWORD_PROPERTY, dotenv.get( "AXL_PASSWORD" ) );
-
-        // Uncomment the section below to disable HTTPS certificate checking,
-        //   otherwise import the CUCM Tomcat certificate - see README.md
-
-        // X509TrustManager[] trustAll = new X509TrustManager[] { new X509TrustManager() {
-        //     public java.security.cert.X509Certificate[] getAcceptedIssuers() { return null; }
-        //     public void checkClientTrusted( X509Certificate[] arg0, String arg1) throws CertificateException { };
-        //     public void checkServerTrusted( X509Certificate[] arg0, String arg1) throws CertificateException { };
-        //     }
-        // };
-        // SSLContext context = SSLContext.getInstance( "TLS" );
-        // context.init( null, trustAll, new java.security.SecureRandom() );
-        // provider.getRequestContext().put( "com.sun.xml.ws.transport.https.client.SSLSocketFactory", context.getSocketFactory() );
-        
-        // Use a local trust store file to validate HTTPS certificates.
-        //   Requires importing the CUCM Tomcat certificate from CUCM into file certificate/local_truststore, see README.md
-        System.setProperty( "javax.net.ssl.trustStore", "certificate/cacerts" );
-        System.setProperty( "javax.net.ssl.trustStorePassword", "changeit" );
+        // for our particular environment in the JAX-WS client.
+        // Configure these values in .env
+        ( ( BindingProvider ) axlPort ).getRequestContext().put( BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+                "https://" + dotenv.get( "CUCM" ) + ":8443/axl/");
+        ( (BindingProvider ) axlPort ).getRequestContext().put( BindingProvider.USERNAME_PROPERTY, dotenv.get( "AXL_USER" ) );
+        ( (BindingProvider ) axlPort ).getRequestContext().put( BindingProvider.PASSWORD_PROPERTY,
+                dotenv.get( "AXL_PASSWORD" ) );
 
         // Create an executeSqlQuery request object
         ExecuteSQLQueryReq query = new ExecuteSQLQueryReq();
@@ -101,6 +77,7 @@ public class executeSqlQuery {
         // Set the text of the SQL query
         query.setSql( "select name, pkid from applicationuser" );
 
+        // We'll use this list to receive the rows returned by the query
         List<Object> user_list = null;
 
         try {
@@ -109,9 +86,9 @@ public class executeSqlQuery {
 
             // getRow() returns all of the rows as a List<Object> type
             user_list = resp.getReturn().getRow();
-        } catch ( Exception err ) {
-            // If an exception occurs, dump the stacktrace to the console
-            err.printStackTrace();
+
+        } catch ( Exception e ) {
+
         }
 
         // Create an iterator to cycle through each row, below
@@ -121,14 +98,12 @@ public class executeSqlQuery {
         while ( itr.hasNext() ) {
 
             // The individual row object is of this ElementNSImpl type - we'll need to cast from generic Object here
-            org.w3c.dom.Element el = (org.w3c.dom.Element) itr.next();
-            // ElementNSImpl el = ( ElementNSImpl )itr.next();
+            ElementNSImpl el = ( ElementNSImpl )itr.next();
 
             // Print out the formatted name and pkid values
             System.out.println(
                 "Name: " + String.format( "%-20s", el.getElementsByTagName( "name" ).item( 0 ).getTextContent() )+
-                " PKID: " + el.getElementsByTagName( "pkid" ).item( 0 ).getTextContent() 
-                );
+                " PKID: " + el.getElementsByTagName( "pkid" ).item( 0 ).getTextContent() );
         }
 
     }
