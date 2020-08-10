@@ -6,21 +6,21 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Debug: addMobilityProfile",
+            "name": "Launch addMobilityProfile",
             "request": "launch",
             "mainClass": "com.cisco.axlsamples.addMobilityProfile",
             "projectName": "axl-java-samples"
         },
         {
             "type": "java",
-            "name": "Debug: getPhone",
+            "name": "Launch getPhone",
             "request": "launch",
             "mainClass": "com.cisco.axlsamples.getPhone",
             "projectName": "axl-java-samples"
         },
         {
             "type": "java",
-            "name": "Debug: executeSqlQuery",
+            "name": "Launch executeSqlQuery",
             "request": "launch",
             "mainClass": "com.cisco.axlsamples.executeSqlQuery",
             "projectName": "axl-java-samples"
