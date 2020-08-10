@@ -2,15 +2,19 @@
 
 ## Overview
 
-Sample Visual Studio Code project demonstrating usage of the Cisco CUCM AXL SOAP API using Java 8 and the JAX-WS packages.
+Sample Visual Studio Code project demonstrating usage of the Cisco CUCM AXL SOAP API using Java 8 and the Oracle JAX-WS packages or OpenJDK 11 and the Eclipse EEE4J JAX-WS packages.
 
 Visit the [AXL Developer Site](https://developer.cisco.com/site/axl/)
 
->Note: this project was tested using Ubuntu 19.10 / Oracle JDK 8
+>Note: this project was tested using:
+
+* Ubuntu 19.10/20.04 / Mac 10.15.6
+* Oracle JDK 8 / OpenJDK 11
+* Oracle JAX-WS / Eclipse EEE4J Metro JAX-WS
 
 ## Getting started
 
-1. Make sure you have Oracle Java JDK 1.8 installed, `java` is available in the path, and the JAVA_HOME environment variable is set:
+1. Make sure you have Oracle JDK 1.8 or OpenJDK 11 installed, `java` is available in the path, and the JAVA_HOME environment variable is set:
 
     ```shell
     $ java -version
@@ -32,6 +36,12 @@ Visit the [AXL Developer Site](https://developer.cisco.com/site/axl/)
     git clone https://github.com/CiscoDevNet/axl-java-samples.git
     ```
 
+1.  Select branch `java8` or `java11` of this project as appropriate (future additional samples may appear only in `java11`):
+
+    ```bash
+    git checkout java8
+    ```
+
 1. Open the `axl-java-samples` Java project in [Visual Studio Code](https://code.visualstudio.com/):
 
     ```bash
@@ -49,7 +59,7 @@ Visit the [AXL Developer Site](https://developer.cisco.com/site/axl/)
 
         ![cert_list](images/cert_list.png)
 
-    1. Click **Download .PEM File**, and save into this project's `certificate/` folder.  You may want to give it a recognizable name e.g. the host name.
+    1. Click **Download .PEM File**, and save into this project's `certificate/` folder.  You may want to give it a recognizable name e.g. the CUCM host name.
 
 1. Import the CUCM Tomcat HTTPS certificate into a local Java keystore.
 
