@@ -36,17 +36,11 @@ Visit the [AXL Developer Site](https://developer.cisco.com/site/axl/)
     git clone https://github.com/CiscoDevNet/axl-java-samples.git
     ```
 
-1.  Select branch `java8` or `java11` of this project as appropriate (future additional samples may appear only in `java11`):
-
-    ```bash
-    git checkout java8
-    ```
-
-1. Open the `axl-java-samples` Java project in [Visual Studio Code](https://code.visualstudio.com/):
+1.  If you need to use Oracle JDK8, checkout branch `java8` (future additional samples may appear only in branch `master`, currently supporting OpenJDK 11):
 
     ```bash
     cd axl-java-samples
-    code .
+    git checkout java8
     ```
 
 1. Download the CUCM Tomcat HTTPS certificate and place in the `certificate/` folder:
@@ -87,15 +81,15 @@ Visit the [AXL Developer Site](https://developer.cisco.com/site/axl/)
         AXLSoap.xsd
         ```
 
-1. Generate the AXL/JAX-WS `.java` files from the AXL WSDL.
-
-    From the project root, run:
+1. Open the `axl-java-samples` Java project in [Visual Studio Code](https://code.visualstudio.com/):
 
     ```bash
-    $JAVA_HOME/bin/wsimport -keep -b schema/AXLSoap.xsd -Xnocompile  -s src/main/java -p com.cisco.axlsamples.api -verbose schema/AXLAPI.wsdl
+    code .
     ```
+
+    Upon first opening the project in VS Code, allow some time for VS Code and Maven to auto-generate the AXL API sources/code from the AXL WSDL
   
-1. Rename `.env.example` file to `.env`, and edit it to specify your CUCM hostname and AXL API user credentials
+1. Rename the `.env.example` file to `.env`, and edit it to specify your CUCM hostname and AXL API user credentials.
 
     >Note: you can specify the config values as environment variables using your preferred method, if desired
 

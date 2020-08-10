@@ -21,15 +21,15 @@ buildNumber.properties
 #
 # Visual Studio Code
 #
-.settings/
-.classpath
-.project
-.factorypath
+/.settings/
+/.classpath
+/.project
+/.factorypath
 
 # DevNet additions
 
 .DS_Store
-certificate/**
+certificate/*
 src/main/java/com/cisco/axlsamples/api/**
 .vscode/settings.json
 .env
