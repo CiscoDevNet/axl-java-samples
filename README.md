@@ -91,7 +91,13 @@ Visit the [AXL Developer Site](https://developer.cisco.com/site/axl/)
 
 1.  If you haven't developed Java with VS Code before, you may need to install the 'Java Extention Pack' (vscjava.vscode) extension.
 
-    Upon first opening the project in VS Code, allow the project to be imported into the workspace, then allow some time for VS Code and Maven to auto-generate the AXL API sources/code from the AXL WSDL.
+    Upon first opening the project in VS Code, click 'Yes' import the project into the workspace, then allow some time for VS Code and Maven to auto-generate the AXL API source/code from the AXL WSDL.
+
+1. Once the AXL API source files have been automatically generated (found under `src/main/java/com/cisco/apxsamples/api/`), and compiled (found under `target/classes/com/cisco/axlsamples/api/`):
+
+    * From the file **Explorer** tab, highlight `pom.xml`.
+    
+    * Open the VS Code command window and run the **Java: Update project configuration** command.
   
 1. Rename the `.env.example` file to `.env`, and edit it to specify your CUCM hostname and AXL API user credentials.
 

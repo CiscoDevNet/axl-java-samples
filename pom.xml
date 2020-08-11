@@ -97,7 +97,7 @@
                             </bindingFiles>
                             <sourceDestDir>${basedir}/src/main/java</sourceDestDir>
                             <destDir>${basedir}/target/classes</destDir>
-                            <xnocompile>true</xnocompile>
+                            <xnocompile>false</xnocompile>
                             <vmArgs>
                                 <vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
                             </vmArgs>
