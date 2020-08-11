@@ -2,32 +2,34 @@
 
 ## Overview
 
-Sample Visual Studio Code project demonstrating usage of the Cisco CUCM AXL SOAP API using Java 8 and the Oracle JAX-WS packages or OpenJDK 11 and the Eclipse EEE4J JAX-WS packages.
+Sample Visual Studio Code project demonstrating usage of the Cisco CUCM AXL SOAP API using OpenJDK 11 and the Eclipse EEE4J JAX-WS packages.
 
 Visit the [AXL Developer Site](https://developer.cisco.com/site/axl/)
 
 >Note: this project was tested using:
 
-* Ubuntu 19.10/20.04 / Mac 10.15.6
-* Oracle JDK 8 / OpenJDK 11
-* Oracle JAX-WS / Eclipse EEE4J Metro JAX-WS
+* Ubuntu 20.04 / Mac 10.15.6
+* OpenJDK 11
+* Eclipse EEE4J Metro JAX-WS
+
+>Note: the `java8` branch is available for supporting Oracle Java 8, however the Redhat Java plugin for VS Code no longer supports Java 8, so the project may not run with VS Code
 
 ## Getting started
 
-1. Make sure you have Oracle JDK 1.8 or OpenJDK 11 installed, `java` is available in the path, and the JAVA_HOME environment variable is set:
+1. Make sure you have OpenJDK 11 installed, `java` is available in the path, and the JAVA_HOME environment variable is set:
 
     ```shell
     $ java -version
-
-    java version "1.8.0_231"
-    Java(TM) SE Runtime Environment (build 1.8.0_231-b11)
-    Java HotSpot(TM) 64-Bit Server VM (build 25.231-b11, mixed mode)
+    # Example output
+    openjdk version "11.0.8" 2020-07-14
+    OpenJDK Runtime} Environment AdoptOpenJDK (build 11.0.8+10)
+    OpenJDK 64-Bit Server VM AdoptOpenJDK (build 11.0.8+10, mixed mode)
     ```
 
     ```shell
     $ echo $JAVA_HOME
-
-    /usr/lib/jvm/jdk1.8.0_231
+    # Example output
+    /Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home
     ```
 
 1. Open a terminal and use `git` to clone this repository:
@@ -87,7 +89,9 @@ Visit the [AXL Developer Site](https://developer.cisco.com/site/axl/)
     code .
     ```
 
-    Upon first opening the project in VS Code, allow some time for VS Code and Maven to auto-generate the AXL API sources/code from the AXL WSDL
+1.  If you haven't developed Java with VS Code before, you may need to install the 'Java Extention Pack' (vscjava.vscode) extension.
+
+    Upon first opening the project in VS Code, allow the project to be imported into the workspace, then allow some time for VS Code and Maven to auto-generate the AXL API sources/code from the AXL WSDL.
   
 1. Rename the `.env.example` file to `.env`, and edit it to specify your CUCM hostname and AXL API user credentials.
 
