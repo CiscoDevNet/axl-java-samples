@@ -48,11 +48,11 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class executeSqlQuery {
 
-    public static void main(String[] args) throws NoSuchAlgorithmException, KeyManagementException, AXLError_Exception {
+    public static void main( String[] args ) throws NoSuchAlgorithmException, KeyManagementException, AXLError_Exception {
 
         Boolean debug = false;
 
-        if ( debug ) { System.setProperty("com.sun.xml.ws.transport.http.client.HttpTransportPipe.dump", "true"); }
+        if ( debug ) { System.setProperty( "com.sun.xml.ws.transport.http.client.HttpTransportPipe.dump", "true" ); }
 
         // Retrieve environment variables from .env, if present
         Dotenv dotenv = Dotenv.load();
@@ -76,6 +76,8 @@ public class executeSqlQuery {
         requestContext.put( BindingProvider.ENDPOINT_ADDRESS_PROPERTY, "https://" + dotenv.get( "CUCM" ) + ":8443/axl/");
         requestContext.put( BindingProvider.USERNAME_PROPERTY, dotenv.get( "AXL_USER" ) );
         requestContext.put( BindingProvider.PASSWORD_PROPERTY, dotenv.get( "AXL_PASSWORD" ) );
+        // Enable cookies for AXL authentication session reuse
+        requestContext.put( BindingProvider.SESSION_MAINTAIN_PROPERTY, true );
 
         // Uncomment the section below to disable HTTPS certificate checking,
         //   otherwise import the CUCM Tomcat certificate - see README.md
