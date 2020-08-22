@@ -1,7 +1,7 @@
 package com.cisco.axlsamples;
 
-// Performs a <executeSqlQuery> operation for the applicationusers table and extracts
-// the name and pkid from the response using the AXL API.
+// Performs a <getEnterprisePhoneConfig> operation, then parses/prints
+// a simple report to the console.
 
 // Copyright (c) 2019 Cisco and/or its affiliates.
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,9 +22,11 @@ package com.cisco.axlsamples;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Iterator;
 
 import javax.xml.ws.BindingProvider;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import java.security.cert.X509Certificate;
 import java.security.KeyManagementException;
@@ -37,8 +39,8 @@ import javax.net.ssl.X509TrustManager;
 import com.cisco.axlsamples.api.AXLAPIService;
 import com.cisco.axlsamples.api.AXLError_Exception;
 import com.cisco.axlsamples.api.AXLPort;
-import com.cisco.axlsamples.api.ExecuteSQLQueryReq;
-import com.cisco.axlsamples.api.ExecuteSQLQueryRes;
+import com.cisco.axlsamples.api.GetEnterprisePhoneConfigReq;
+import com.cisco.axlsamples.api.GetEnterprisePhoneConfigRes;
 
 // To import the entire AXL package contents:
 //
@@ -46,7 +48,7 @@ import com.cisco.axlsamples.api.ExecuteSQLQueryRes;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
-public class executeSqlQuery {
+public class getEnterprisePhoneConfig {
 
     public static void main( String[] args ) throws NoSuchAlgorithmException, KeyManagementException, AXLError_Exception {
 
@@ -97,40 +99,48 @@ public class executeSqlQuery {
         System.setProperty( "javax.net.ssl.trustStore", "certificate/cacerts" );
         System.setProperty( "javax.net.ssl.trustStorePassword", "changeit" );
 
-        // Create an executeSqlQuery request object
-        ExecuteSQLQueryReq query = new ExecuteSQLQueryReq();
+        // Create request/response objects - nothing needs to be configured on the request object
+        GetEnterprisePhoneConfigReq request = new GetEnterprisePhoneConfigReq();
+        GetEnterprisePhoneConfigRes response = null;
 
-        // Set the text of the SQL query
-        query.setSql( "select name, pkid from applicationuser" );
+        try { 
+            // Execute the request
+            response = axlPort.getEnterprisePhoneConfig( request );
 
-        List<Object> user_list = null;
-
-        try {
-            // Prepare a ExecuteSQLQueryRes object to receive the response from AXL
-            ExecuteSQLQueryRes resp = axlPort.executeSQLQuery( query );
-
-            // getRow() returns all of the rows as a List<Object> type
-            user_list = resp.getReturn().getRow();
         } catch ( Exception err ) {
             // If an exception occurs, dump the stacktrace to the console
             err.printStackTrace();
         }
 
-        // Create an iterator to cycle through each row, below
-        Iterator<Object> itr = user_list.iterator();
+        // Extract the vendorConfig contents, which will be a Java List of Element objects
+        List<Element> vendorConfig = response.getReturn().getEnterprisePhoneConfig().getVendorConfig().getValue().getAny();
 
-        // While the iterator indicates there is at least one more row...
-        while ( itr.hasNext() ) {
+        System.out.println( "\nProduct Specific Configuration Layout" );
+        System.out.println( "=====================================" );
 
-            // The individual row object is of org.w3c.dom.Element type - we'll need to cast from generic Object here
-            org.w3c.dom.Element el = (org.w3c.dom.Element) itr.next();
+        for (Element el : vendorConfig) {
 
-            // Print out the formatted name and pkid values
-            System.out.println(
-                "Name: " + String.format( "%-20s", el.getElementsByTagName( "name" ).item( 0 ).getTextContent() )+
-                " PKID: " + el.getElementsByTagName( "pkid" ).item( 0 ).getTextContent() 
-                );
+            // If this element's first child contains a text value...
+            if ( el.getFirstChild().getNodeType() == Element.TEXT_NODE ) {
+
+                System.out.println( el.getTagName() + ": " + el.getFirstChild().getTextContent() );
+            }
+            else {
+
+                // This element contains subelements...
+                System.out.println( "\n" + el.getTagName() );
+                System.out.println( "-".repeat( el.getTagName().length() ) );
+
+                NodeList children = el.getChildNodes();
+
+                // Loop through all the child elements and print out the name/value
+                for ( int i = 0; i < children.getLength()-1; i++  ) {
+
+                        System.out.println( "\t" + children.item( i ).getNodeName() + ": " + children.item( i ).getTextContent() );
+                }
+            }
+
         }
-
     }
+
 }

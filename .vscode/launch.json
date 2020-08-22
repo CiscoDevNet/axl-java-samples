@@ -24,6 +24,13 @@
             "request": "launch",
             "mainClass": "com.cisco.axlsamples.executeSqlQuery",
             "projectName": "axl-java-samples"
+        },
+        {
+            "type": "java",
+            "name": "Launch getEnterprisePhoneConfig",
+            "request": "launch",
+            "mainClass": "com.cisco.axlsamples.getEnterprisePhoneConfig",
+            "projectName": "axl-java-samples"
         }
     ]
 }

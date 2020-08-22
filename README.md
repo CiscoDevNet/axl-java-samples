@@ -6,13 +6,23 @@ Sample Visual Studio Code project demonstrating usage of the Cisco CUCM AXL SOAP
 
 Visit the [AXL Developer Site](https://developer.cisco.com/site/axl/)
 
->Note: this project was tested using:
+This project was tested using:
 
 * Ubuntu 20.04 / Mac 10.15.6
 * OpenJDK 11
 * Eclipse EEE4J Metro JAX-WS
 
 >Note: the `java8` branch is available for supporting Oracle Java 8, however the Redhat Java plugin for VS Code no longer supports Java 8, so the project may not run with VS Code
+
+## Available samples
+
+* `getPhone.java` - Demonstrates querying for configuration information for a specific phone by device name (`<getPhone>`)
+
+* `addMobilityProfile.java` - Add a new Mobility Profile (`<addMobilityProfile>`, `<removeMobilityProfile>`)
+
+* `executeSqlQuery.java` - Performs an executeSqlQuery operation for the applicationusers table and extracts the name and pkid from the response  (`<executeSqlQuery>`)
+
+* `getEnterprisePhoneConfig.java` - Performs a `<getEnterprisePhoneConfig>`, then parses/prints a simple report to the console.
 
 ## Getting started
 
@@ -106,11 +116,3 @@ Visit the [AXL Developer Site](https://developer.cisco.com/site/axl/)
 1. Finally, to launch one of the available samples, in VS Code select the **Debug** panel, choose a launch configuration from the dropdown-list in the upper-left, and click the green **Start Debugging** arrow:
 
     ![Launch](images/launch.png)
-
-## Available samples
-
-* `getPhone.java` - Demonstrates querying for configuration information for a specific phone by device name (`<getPhone>`)
-
-* `addMobilityProfile.java` - Add a new Mobility Profile (`<addMobilityProfile>`, `<removeMobilityProfile>`)
-
-* `executeSqlQuery.java` - Performs an executeSqlQuery operation for the applicationusers table and extracts the name and pkid from the response  (`<executeSqlQuery>`)
