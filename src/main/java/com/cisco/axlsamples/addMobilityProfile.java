@@ -51,12 +51,12 @@ public class addMobilityProfile {
 
     public static void main(String[] args) {
 
-        Boolean debug = false;
-
-        if ( debug ) { System.setProperty("com.sun.xml.ws.transport.http.client.HttpTransportPipe.dump", "true"); }
-
         // Retrieve environment variables from .env, if present
         Dotenv dotenv = Dotenv.load();
+
+        Boolean debug = dotenv.get( "DEBUG" ).equals( "True" );
+
+        if ( debug ) { System.setProperty("com.sun.xml.ws.transport.http.client.HttpTransportPipe.dump", "true"); }
 
         // Verify the JVM has a console for user input
         if ( System.console() == null ) {

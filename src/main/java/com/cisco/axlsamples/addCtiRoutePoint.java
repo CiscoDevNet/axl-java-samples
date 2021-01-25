@@ -1,7 +1,8 @@
 package com.cisco.axlsamples;
 
-// Performs <addMobilityProfile>, and then <removeMobilityProfile> AXL API operations
-// with some hard-coded values.
+// Performs <addLine>, then creates a new CTI Route Point using the line with
+// <addCtiRoutePoint>.  Finally, <removeCtiRoutePoint> and <removeLine> AXL API operations
+// are used to clean up.
 
 // Copyright (c) 2019 Cisco and/or its affiliates.
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,7 +20,9 @@ package com.cisco.axlsamples;
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
+
 import java.util.Map;
+import java.util.List;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.ws.BindingProvider;
@@ -34,29 +37,37 @@ import javax.net.ssl.X509TrustManager;
 // import only the XL package modules needed for this sample
 import com.cisco.axlsamples.api.AXLAPIService;
 import com.cisco.axlsamples.api.AXLPort;
-import com.cisco.axlsamples.api.AddPhoneReq;
+import com.cisco.axlsamples.api.AddCtiRoutePointReq;
+import com.cisco.axlsamples.api.AddLineReq;
 import com.cisco.axlsamples.api.NameAndGUIDRequest;
 import com.cisco.axlsamples.api.ObjectFactory;
+import com.cisco.axlsamples.api.RemoveLineReq;
 import com.cisco.axlsamples.api.StandardResponse;
-import com.cisco.axlsamples.api.XDirn;
+import com.cisco.axlsamples.api.XCtiRoutePoint.Lines;
+import com.cisco.axlsamples.api.XLine;
+import com.cisco.axlsamples.api.XNumplanIdentifier;
 import com.cisco.axlsamples.api.XFkType;
-import com.cisco.axlsamples.api.XPhone;
+import com.cisco.axlsamples.api.XCtiRoutePoint;
 import io.github.cdimascio.dotenv.Dotenv;
 
-// To import the entire AXL package contents:
+// pr. to import the entire AXL package contents:
 //
 // import com.cisco.axl.api.*;
 
-public class addPhone {
+public class addCtiRoutePoint {
 
     public static void main(String[] args) {
 
-        Boolean debug = false;
-
-        if ( debug ) { System.setProperty("com.sun.xml.ws.transport.http.client.HttpTransportPipe.dump", "true"); }
-
         // Retrieve environment variables from .env, if present
         Dotenv dotenv = Dotenv.load();
+
+        Boolean debug = dotenv.get( "DEBUG" ).equals( "True" );
+
+        if ( debug ) { 
+            System.setProperty("com.sun.xml.ws.transport.http.client.HttpTransportPipe.dump", "true");
+            // Increase the dump output permitted size
+            System.setProperty("com.sun.xml.ws.transport.http.HttpAdapter.dumpTreshold", "999999");
+        }
 
         // Verify the JVM has a console for user input
         if ( System.console() == null ) {
@@ -101,46 +112,70 @@ public class addPhone {
         // Create an objectFactory for creating AXL specific objects
         ObjectFactory objectFactory = new ObjectFactory();
 
-        // Create a new <addPhone> request object and its sub-objects
-        // Indentation here attempts to represent the object/sub-object hierarchy
-        // The AXL schema documentation can help in understanding parent/child
-        // object relations/types
-        AddPhoneReq addReq = new AddPhoneReq();
-            XPhone phone = new XPhone();
-                phone.setName("testRoutePoint");
-                phone.setProduct("CTI Route Point");
-                phone.setClazz("CTI Route Point");
-                phone.setProtocol("Route Point");
-                phone.setProtocolSide("User");
+        // Create a new line, which will be added along with the CTI RP
 
-                XFkType foreignKey = new XFkType();
-                    foreignKey.setValue("Default");
-                JAXBElement<XFkType> devicePool = objectFactory.create createXDevicePoolName(foreignKey);
-                phone.setDevicePoolName(devicePool);
+        AddLineReq addlineReq = new AddLineReq();
+            XLine newLine = new XLine();
+            newLine.setPattern( "9999" );
+                XFkType routePartitionForeignKey = new XFkType();
+                routePartitionForeignKey.setValue( null );
+                JAXBElement<XFkType> routePartitionName = objectFactory.createXCtiRoutePointDevicePoolName( routePartitionForeignKey );
+            newLine.setRoutePartitionName( routePartitionName );            
 
-        // AddMobilityProfileReq addReq = new AddMobilityProfileReq();
-        //     XMobilityProfile profile = new XMobilityProfile();
-        //         profile.setName("testMobilityProfile");
-        //         profile.setMobileClientCallingOption("Dial via Office Reverse");
-        //         profile.setDvofServiceAccessNumber("1000");
-        //         XDirn dn = new XDirn();
-        //             dn.setPattern("1000");
-        //                 XFkType foreignKey = new XFkType();
-        //                     foreignKey.setValue(null);
-        //             JAXBElement<XFkType> partition = objectFactory.createXDirnRoutePartitionName(foreignKey);
-        //             dn.setRoutePartitionName(partition);
-        //         profile.setDirn(dn);
-        //         JAXBElement<String> callerid = objectFactory.createXMobilityProfileDvorCallerId("1003");
-        //         profile.setDvorCallerId(callerid);
-        //     addReq.setMobilityProfile(profile);
-        
+        addlineReq.setLine( newLine );
+
         // Execute the request, wrapped in try/catch in case an exception is thrown
         try {
 
-            StandardResponse response = axlPort.addPhone(addReq);
+            StandardResponse response = axlPort.addLine( addlineReq );
 
             // Dive into the response object's hierarchy to retrieve the <return> value
-            System.console().format("%nAdded Phone pkid: " + response.getReturn()  + "%n%n");
+            System.console().format( "%nAdded Line pkid: " + response.getReturn()  + "%n%n" );
+            
+        } catch (Exception err) {
+
+            // If an exception occurs, dump the stacktrace to the console
+            err.printStackTrace();
+        }
+        
+        System.console().readLine( "Press Enter to continue..." );
+
+        // Create a new <addCtiRoutePoint> request object and its sub-objects
+        // Indentation here attempts to represent the object/sub-object hierarchy
+        // The AXL schema documentation can help in understanding parent/child
+        // object relations/types
+        AddCtiRoutePointReq addCtiRpReq = new AddCtiRoutePointReq();
+            XCtiRoutePoint ctiRp = new XCtiRoutePoint();
+            ctiRp.setName( "testRoutePoint" );
+            ctiRp.setProduct( "CTI Route Point" );
+            ctiRp.setClazz( "CTI Route Point" );
+            ctiRp.setProtocol( "SCCP" );
+            ctiRp.setProtocolSide( "User" );
+                XFkType devicePoolForeignKey = new XFkType();
+                devicePoolForeignKey.setValue( "Default" );
+                JAXBElement<XFkType> devicePoolName = objectFactory.createXCtiRoutePointDevicePoolName( devicePoolForeignKey );
+            ctiRp.setDevicePoolName( devicePoolName );
+                XFkType locationForeignKey = new XFkType();
+                locationForeignKey.setValue( "Hub_None" );
+            ctiRp.setLocationName( locationForeignKey );
+                Lines lines = new Lines();
+                // This provides a List object pointing to the <lines><listIdentifier> array
+                List<XNumplanIdentifier> linesList = lines.getLineIdentifier();
+                    XNumplanIdentifier line = new XNumplanIdentifier();
+                    line.setDirectoryNumber( "9999" );
+                    line.setRoutePartitionName( null );
+                // We can use listLines to manipulate the Lines object, i.e. to add a lineIdentifier
+                linesList.add( line );
+            ctiRp.setLines( lines );
+        addCtiRpReq.setCtiRoutePoint( ctiRp );                
+
+        // Execute the request, wrapped in try/catch in case an exception is thrown
+        try {
+
+            StandardResponse response = axlPort.addCtiRoutePoint( addCtiRpReq );
+
+            // Dive into the response object's hierarchy to retrieve the <return> value
+            System.console().format("%nAdded CTI Route Point pkid: " + response.getReturn()  + "%n%n");
             
         } catch (Exception err) {
 
@@ -150,18 +185,35 @@ public class addPhone {
         
         System.console().readLine("Press Enter to continue...");
 
-        // Remove the newly created phone
+        // Remove the newly created objects
 
         // NameAndGUIDRequest type is commonly used for <removeXXX> requests 
-        NameAndGUIDRequest removeReq = new NameAndGUIDRequest();
+        NameAndGUIDRequest removeCtiRpReq = new NameAndGUIDRequest();
 
-        removeReq.setName("testRoutePoint");
+        removeCtiRpReq.setName( "testRoutePoint" );
 
         try {
 
-            StandardResponse response = axlPort.removePhone(removeReq);
+            StandardResponse response = axlPort.removePhone( removeCtiRpReq );
 
-            System.console().format("%nRemoved object pkid: " + response.getReturn()  + "%n%n");
+            System.console().format( "%nRemoved CTI Route Point pkid: " + response.getReturn()  + "%n" );
+            
+        } catch (Exception err) {
+
+            err.printStackTrace();
+        }
+
+
+        RemoveLineReq removeLineReq = new RemoveLineReq();
+
+        removeLineReq.setPattern( "9999" );
+        removeLineReq.setRoutePartitionName( routePartitionName );
+
+        try {
+
+            StandardResponse response = axlPort.removeLine( removeLineReq );
+
+            System.console().format( "%nRemoved Line pkid: " + response.getReturn()  + "%n%n") ;
             
         } catch (Exception err) {
 
