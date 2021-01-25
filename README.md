@@ -24,6 +24,8 @@ This project was tested using:
 
 * `getEnterprisePhoneConfig.java` - Performs a `<getEnterprisePhoneConfig>`, then parses/prints a simple report to the console.
 
+* `addCtiRoutePoint.java` - Performs `<addLine>`, then creates a new CTI Route Point using the line with `<addCtiRoutePoint>`.
+
 ## Getting started
 
 1. Make sure you have OpenJDK 11 installed, `java` is available in the path, and the JAVA_HOME environment variable is set:
@@ -116,3 +118,13 @@ This project was tested using:
 1. Finally, to launch one of the available samples, in VS Code select the **Debug** panel, choose a launch configuration from the dropdown-list in the upper-left, and click the green **Start Debugging** arrow:
 
     ![Launch](images/launch.png)
+
+## Hints
+
+* Samples include AXL XML request/response debugging functionaly.  To enable set `DEBUG=True` in `.env`
+
+* The AXL schema is huge, and will consume a lot of memory during compilation and execution, including for things like Intellisense.  You may see better performance in VS Code by increasing the max memory allowed for the VS Code Java engine via the `settings.json` file, e.g. to allocate 8GB of max memory:
+
+    ```json
+    "java.jdt.ls.vmargs": "-Xmx8G -Xms100m"
+    ```

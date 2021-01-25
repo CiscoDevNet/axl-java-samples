@@ -31,6 +31,13 @@
             "request": "launch",
             "mainClass": "com.cisco.axlsamples.getEnterprisePhoneConfig",
             "projectName": "axl-java-samples"
+        },
+        {
+            "type": "java",
+            "name": "Launch addCtiRoutePoint",
+            "request": "launch",
+            "mainClass": "com.cisco.axlsamples.addCtiRoutePoint",
+            "projectName": "axl-java-samples"
         }
     ]
 }
