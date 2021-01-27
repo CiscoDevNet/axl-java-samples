@@ -26,6 +26,8 @@ This project was tested using:
 
 * `addCtiRoutePoint.java` - Performs `<addLine>`, then creates a new CTI Route Point using the line with `<addCtiRoutePoint>`.
 
+* `addPhone.java` - Performs `<addLine>`, then creates a new CTI Port using the line with `<addPhone>`.
+
 ## Getting started
 
 1. Make sure you have OpenJDK 11 installed, `java` is available in the path, and the JAVA_HOME environment variable is set:

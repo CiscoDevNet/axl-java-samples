@@ -1,6 +1,6 @@
 package com.cisco.axlsamples;
 
-// Performs <addLine>, then creates a new 8811 phone using the line with
+// Performs <addLine>, then creates a new CTI Port using the line with
 // <addPhone>.  Finally, <removePhone> and <removeLine> AXL API operations
 // are used to clean up.
 
@@ -146,10 +146,10 @@ public class addPhone {
         // object relations/types
         AddPhoneReq addPhoneReq = new AddPhoneReq();
             XPhone phone = new XPhone();
-            phone.setName( "SEP999999999999" );
-            phone.setProduct( "Cisco 8811" );
+            phone.setName( "testCtiPort" );
+            phone.setProduct( "CTI Port" );
             phone.setClazz( "Phone" );
-            phone.setProtocol( "SIP" );
+            phone.setProtocol( "SCCP" );
             phone.setProtocolSide( "User" );
                 XFkType devicePoolForeignKey = new XFkType();
                 devicePoolForeignKey.setValue( "Default" );
@@ -190,7 +190,7 @@ public class addPhone {
         // NameAndGUIDRequest type is commonly used for <removeXXX> requests 
         NameAndGUIDRequest removePhoneReq = new NameAndGUIDRequest();
 
-        removePhoneReq.setName( "SEP999999999999" );
+        removePhoneReq.setName( "testCtiPort" );
 
         try {
 
