@@ -1,7 +1,7 @@
 package com.cisco.axlsamples;
 
-// Performs <addLine>, then creates a new CTI Route Point using the line with
-// <addCtiRoutePoint>.  Finally, <removeCtiRoutePoint> and <removeLine> AXL API operations
+// Performs <addLine>, then creates a new 8811 phone using the line with
+// <addPhone>.  Finally, <removePhone> and <removeLine> AXL API operations
 // are used to clean up.
 
 // Copyright (c) 2021 Cisco and/or its affiliates.
@@ -37,24 +37,24 @@ import javax.net.ssl.X509TrustManager;
 // import only the XL package modules needed for this sample
 import com.cisco.axlsamples.api.AXLAPIService;
 import com.cisco.axlsamples.api.AXLPort;
-import com.cisco.axlsamples.api.AddCtiRoutePointReq;
+import com.cisco.axlsamples.api.AddPhoneReq;
 import com.cisco.axlsamples.api.AddLineReq;
 import com.cisco.axlsamples.api.NameAndGUIDRequest;
 import com.cisco.axlsamples.api.ObjectFactory;
 import com.cisco.axlsamples.api.RemoveLineReq;
 import com.cisco.axlsamples.api.StandardResponse;
-import com.cisco.axlsamples.api.XCtiRoutePoint.Lines;
+import com.cisco.axlsamples.api.XPhone.Lines;
 import com.cisco.axlsamples.api.XLine;
 import com.cisco.axlsamples.api.XNumplanIdentifier;
 import com.cisco.axlsamples.api.XFkType;
-import com.cisco.axlsamples.api.XCtiRoutePoint;
+import com.cisco.axlsamples.api.XPhone;
 import io.github.cdimascio.dotenv.Dotenv;
 
 // To import the entire AXL package contents:
 //
 // import com.cisco.axl.api.*;
 
-public class addCtiRoutePoint {
+public class addPhone {
 
     public static void main(String[] args) {
 
@@ -144,20 +144,20 @@ public class addCtiRoutePoint {
         // Indentation here attempts to represent the object/sub-object hierarchy
         // The AXL schema documentation can help in understanding parent/child
         // object relations/types
-        AddCtiRoutePointReq addCtiRpReq = new AddCtiRoutePointReq();
-            XCtiRoutePoint ctiRp = new XCtiRoutePoint();
-            ctiRp.setName( "testRoutePoint" );
-            ctiRp.setProduct( "CTI Route Point" );
-            ctiRp.setClazz( "CTI Route Point" );
-            ctiRp.setProtocol( "SCCP" );
-            ctiRp.setProtocolSide( "User" );
+        AddPhoneReq addPhoneReq = new AddPhoneReq();
+            XPhone phone = new XPhone();
+            phone.setName( "SEP999999999999" );
+            phone.setProduct( "Cisco 8811" );
+            phone.setClazz( "Phone" );
+            phone.setProtocol( "SIP" );
+            phone.setProtocolSide( "User" );
                 XFkType devicePoolForeignKey = new XFkType();
                 devicePoolForeignKey.setValue( "Default" );
                 JAXBElement<XFkType> devicePoolName = objectFactory.createXCtiRoutePointDevicePoolName( devicePoolForeignKey );
-            ctiRp.setDevicePoolName( devicePoolName );
+            phone.setDevicePoolName( devicePoolName );
                 XFkType locationForeignKey = new XFkType();
                 locationForeignKey.setValue( "Hub_None" );
-            ctiRp.setLocationName( locationForeignKey );
+            phone.setLocationName( locationForeignKey );
                 Lines lines = new Lines();
                 // This provides a List object pointing to the <lines><listIdentifier> array
                 List<XNumplanIdentifier> linesList = lines.getLineIdentifier();
@@ -166,16 +166,16 @@ public class addCtiRoutePoint {
                     line.setRoutePartitionName( null );
                 // We can use listLines to manipulate the Lines object, i.e. to add a lineIdentifier
                 linesList.add( line );
-            ctiRp.setLines( lines );
-        addCtiRpReq.setCtiRoutePoint( ctiRp );                
+            phone.setLines( lines );
+        addPhoneReq.setPhone( phone );                
 
         // Execute the request, wrapped in try/catch in case an exception is thrown
         try {
 
-            StandardResponse response = axlPort.addCtiRoutePoint( addCtiRpReq );
+            StandardResponse response = axlPort.addPhone( addPhoneReq );
 
             // Dive into the response object's hierarchy to retrieve the <return> value
-            System.console().format("%nAdded CTI Route Point pkid: " + response.getReturn()  + "%n%n");
+            System.console().format("%nAdded Phone pkid: " + response.getReturn()  + "%n%n");
             
         } catch (Exception err) {
 
@@ -188,15 +188,15 @@ public class addCtiRoutePoint {
         // Remove the newly created objects
 
         // NameAndGUIDRequest type is commonly used for <removeXXX> requests 
-        NameAndGUIDRequest removeCtiRpReq = new NameAndGUIDRequest();
+        NameAndGUIDRequest removePhoneReq = new NameAndGUIDRequest();
 
-        removeCtiRpReq.setName( "testRoutePoint" );
+        removePhoneReq.setName( "SEP999999999999" );
 
         try {
 
-            StandardResponse response = axlPort.removePhone( removeCtiRpReq );
+            StandardResponse response = axlPort.removePhone( removePhoneReq );
 
-            System.console().format( "%nRemoved CTI Route Point pkid: " + response.getReturn()  + "%n" );
+            System.console().format( "%nRemoved Phone pkid: " + response.getReturn()  + "%n" );
             
         } catch (Exception err) {
 

@@ -38,6 +38,13 @@
             "request": "launch",
             "mainClass": "com.cisco.axlsamples.addCtiRoutePoint",
             "projectName": "axl-java-samples"
+        },
+        {
+            "type": "java",
+            "name": "Launch addPhone",
+            "request": "launch",
+            "mainClass": "com.cisco.axlsamples.addPhone",
+            "projectName": "axl-java-samples"
         }
     ]
 }
