@@ -8,7 +8,7 @@ Visit the [AXL Developer Site](https://developer.cisco.com/site/axl/)
 
 This project was tested using:
 
-* Ubuntu 20.04 / Mac 10.15.6
+* Ubuntu 20.10 / Mac 10.15.6
 * OpenJDK 11
 * Eclipse EEE4J Metro JAX-WS
 
@@ -27,6 +27,8 @@ This project was tested using:
 * `addCtiRoutePoint.java` - Performs `<addLine>`, then creates a new CTI Route Point using the line with `<addCtiRoutePoint>`.
 
 * `addPhone.java` - Performs `<addLine>`, then creates a new CTI Port using the line with `<addPhone>`.
+
+* `addAppUser.java` - Performs `<addLine>` and `<addPhone>` with the new line, then creates an Application User with the new device assigned.
 
 ## Getting started
 
