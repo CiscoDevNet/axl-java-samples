@@ -45,6 +45,13 @@
             "request": "launch",
             "mainClass": "com.cisco.axlsamples.addPhone",
             "projectName": "axl-java-samples"
+        },
+        {
+            "type": "java",
+            "name": "Launch addAppUser",
+            "request": "launch",
+            "mainClass": "com.cisco.axlsamples.addAppUser",
+            "projectName": "axl-java-samples"
         }
     ]
 }
